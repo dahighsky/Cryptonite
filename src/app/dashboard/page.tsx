@@ -4,11 +4,12 @@ import {
   coinsBasicHeading,
 } from "@/mock-data/coins-basic.data";
 import RecentlyWatched from "../../components/RecentlyWatched";
+import TopCryptoChart from "./topCryptoChart";
 
 const Dashboard = () => {
   return (
     <>
-      <div>Chart</div>
+      <TopCryptoChart />
       <RecentlyWatched />
     </>
   );
