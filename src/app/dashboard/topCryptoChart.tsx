@@ -12,6 +12,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions,
 } from "chart.js";
 
 ChartJS.register(
@@ -106,6 +107,8 @@ const TopCryptoChart = () => {
       borderColor: ["#FF6384", "#36A2EB", "#FFCE56"][index],
       backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"][index],
       fill: false,
+      pointBackgroundColor: "rgba(0, 0, 0, 0)",
+      pointBorderColor: "rgba(0, 0, 0, 0)",
     }));
     setChartData({
       labels,
@@ -113,7 +116,7 @@ const TopCryptoChart = () => {
     });
   };
 
-  const options = {
+  const options: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -133,14 +136,15 @@ const TopCryptoChart = () => {
       },
       y: {
         ticks: {
-          callback: function (value: number) {
-            return "$" + value.toFixed(2);
+          callback: (value: number | string) => {
+            if (typeof value === "number") {
+              return "$" + value.toFixed(2);
+            }
+            return value;
           },
         },
       },
     },
-    pointBackgroundColor: "rgba(0, 0, 0, 0)",
-    pointBorderColor: "rgba(0, 0, 0, 0)",
   };
 
   return (
