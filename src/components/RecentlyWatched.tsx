@@ -56,10 +56,10 @@ const RecentlyWatched = () => {
   return (
     <div>
       <Table
-        title={"Trending"}
-        viewMore={"View More"}
+        title={"Recently Watched"}
+        viewMore={true}
         tableData={data}
-        tableHead={coinsBasicHeading}
+        tableHead={["Token", "Last Price", "24H Change", "Market Cap"]}
       ></Table>
     </div>
   );

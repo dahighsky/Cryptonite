@@ -55,10 +55,10 @@ const Watchlist = () => {
   return (
     <div>
       <Table
-        title={"Trending"}
-        viewMore={"View More"}
+        title={"Watchlist"}
+        viewMore={true}
         tableData={data}
-        tableHead={coinsBasicHeading}
+        tableHead={["Token", "Last Price", "24H Change", "Market Cap"]}
       ></Table>
     </div>
   );

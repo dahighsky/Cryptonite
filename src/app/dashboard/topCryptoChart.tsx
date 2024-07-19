@@ -27,6 +27,7 @@ ChartJS.register(
 
 interface CoinData {
   id: string;
+  symbol: string;
   prices: [number, number][];
 }
 
@@ -54,8 +55,11 @@ const TopCryptoChart = () => {
           }
         );
         const topCoins = response.data.slice(0, 3).map((coin: any) => coin.id);
+        const topCoinsSymbols = response.data
+          .slice(0, 3)
+          .map((coin: any) => coin.symbol);
         const priceData = await Promise.all(
-          topCoins.map(async (coinId: string) => {
+          topCoins.map(async (coinId: string, index: number) => {
             const response = await axios.get(
               `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart`,
               {
@@ -65,7 +69,11 @@ const TopCryptoChart = () => {
                 },
               }
             );
-            return { id: coinId, prices: response.data.prices };
+            return {
+              id: coinId,
+              prices: response.data.prices,
+              symbol: topCoinsSymbols[index],
+            };
           })
         );
         prepareChartData(priceData);
@@ -102,13 +110,14 @@ const TopCryptoChart = () => {
       });
     });
     const datasets = data.map((coin, index) => ({
-      label: coin.id,
+      label: coin.symbol.toUpperCase(),
       data: coin.prices.map((price) => price[1]),
-      borderColor: ["#FF6384", "#36A2EB", "#FFCE56"][index],
-      backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"][index],
+      borderColor: ["#FF4DCA", "#F68D7D", "#23DBBD"][index],
+      backgroundColor: ["#FF4DCA", "#F68D7D", "#23DBBD"][index],
       fill: false,
-      pointBackgroundColor: "rgba(0, 0, 0, 0)",
-      pointBorderColor: "rgba(0, 0, 0, 0)",
+      // pointBackgroundColor: "rgba(0, 0, 0, 0)",
+      // pointBorderColor: "rgba(0, 0, 0, 0)",
+      pointRadius: 0,
     }));
     setChartData({
       labels,
@@ -122,33 +131,54 @@ const TopCryptoChart = () => {
     plugins: {
       legend: {
         position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Price of Top 3 Cryptocurrencies (Last 24 Hours)",
+        align: "center",
+        labels: {
+          usePointStyle: true,
+          boxHeight: 4,
+          font: {
+            size: 10,
+            lineHeight: 2,
+          },
+          textAlign: "right",
+        },
       },
     },
     scales: {
       x: {
         ticks: {
-          maxTicksLimit: 12,
+          maxTicksLimit: 6,
+        },
+        grid: {
+          display: false,
+        },
+        border: {
+          display: false,
         },
       },
       y: {
         ticks: {
           callback: (value: number | string) => {
             if (typeof value === "number") {
-              return "$" + value.toFixed(2);
+              return new Intl.NumberFormat().format(+value.toFixed(0));
             }
             return value;
           },
+        },
+        grid: {
+          display: false,
+        },
+        border: {
+          display: false,
         },
       },
     },
   };
 
   return (
-    <div ref={chartContainerRef} style={{ width: "100%", height: "400px" }}>
+    <div
+      ref={chartContainerRef}
+      className="w-full h-[480px] xxl:h-[720px] border-[1px] border-border-light-gray rounded-md p-5"
+    >
       {chartData ? (
         <Line
           options={options}

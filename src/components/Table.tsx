@@ -4,36 +4,51 @@ import { transformCoinData } from "@/lib/utils/data-tansform";
 import { CoinData, TransformedCoinData } from "@/lib/models/coin-data.model";
 
 interface TableProps {
-  title: string;
-  viewMore: string;
+  title?: string;
+  viewMore?: boolean;
   tableHead: string[];
   tableData: CoinData[];
+  outerBorder?: boolean;
+  innerBorder?: boolean;
 }
 
-const Table = (tableProps: TableProps) => {
-  // const _tableHead = tableProps.tableHead.filter((item) => item !== "image");
-  if (!tableProps.tableData || tableProps.tableData.length === 0) {
+const Table = ({
+  title = "",
+  viewMore = false,
+  tableData,
+  tableHead,
+  outerBorder = true,
+  innerBorder = false,
+}: TableProps) => {
+  // const tableHead = tableHead.filter((item) => item !== "image");
+  if (!tableData || tableData.length === 0) {
     return <p>No data available</p>;
   }
 
-  const _tableData: TransformedCoinData[] = tableProps.tableData.map((coin) =>
+  const _tableData: TransformedCoinData[] = tableData.map((coin) =>
     transformCoinData(coin)
   );
 
-  const _tableHead = Object.keys(_tableData[0]).filter(
-    (item) => item !== "image"
-  );
-
   return (
-    <div className="border-[1px] border-border-light-gray rounded-md p-5">
-      <div className="flex justify-between font-semibold mb-4">
-        <div>{tableProps.title}</div>
-        <div className="text-xs text-primary">View More Coins</div>
-      </div>
+    <div
+      className={
+        outerBorder
+          ? `border-[1px] border-border-light-gray rounded-md p-5`
+          : ""
+      }
+    >
+      {(viewMore || title) && (
+        <div className="flex justify-between font-semibold mb-4">
+          {title && <div>{title}</div>}
+          {viewMore && (
+            <div className="text-xs text-primary">View More Coins</div>
+          )}
+        </div>
+      )}
       <table className="w-full">
         <thead>
           <tr className="border-b-[1px] border-border-light-gray">
-            {_tableHead.map((item, index) => {
+            {tableHead.map((item, index) => {
               return (
                 <th
                   key={index}
@@ -48,8 +63,13 @@ const Table = (tableProps: TableProps) => {
         <tbody>
           {_tableData.map((item, idx) => {
             return (
-              <tr key={idx}>
-                {_tableHead.map((key, index) => {
+              <tr
+                key={idx}
+                className={
+                  innerBorder ? "border-b-[1px] border-border-light-gray" : ""
+                }
+              >
+                {tableHead.map((key, index) => {
                   return (
                     <td key={index} className="text-sm py-3">
                       {key === "Token" ? (
@@ -64,7 +84,7 @@ const Table = (tableProps: TableProps) => {
                             {item[key]}
                           </span>
                         </span>
-                      ) : key === "24H Change" ? (
+                      ) : ["24H Change", "7D", "30D", "1Y"].includes(key) ? (
                         <span
                           className={
                             +item[key] > 0 ? "text-green" : "text-orange"
@@ -82,7 +102,7 @@ const Table = (tableProps: TableProps) => {
                             className="inline-block mr-1"
                           />
                           {+item[key] > 0 ? "+" : ""}
-                          {item[key]}
+                          {item[key]}%
                         </span>
                       ) : (
                         item[key]

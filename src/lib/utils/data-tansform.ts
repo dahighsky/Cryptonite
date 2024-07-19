@@ -29,15 +29,32 @@ const formatLargeNumber = (value: number): string => {
 };
 
 const formatPercentage = (value: number): string => {
-  return value.toFixed(2) + "%";
+  return value.toFixed(2);
 };
 
 export const transformCoinData = (data: CoinData): TransformedCoinData => {
   return {
+    id: data.id,
     image: data.image,
+    Symbol: data.symbol.toLocaleUpperCase(),
     Token: data.name,
     "Last Price": formatCurrency(data.current_price),
-    "24H Change": formatPercentage(data.price_change_24h),
+    "24H Change": formatPercentage(data.price_change_percentage_24h),
+    "7D": formatPercentage(
+      data.price_change_percentage_7d_in_currency
+        ? data.price_change_percentage_7d_in_currency
+        : 0
+    ),
+    "30D": formatPercentage(
+      data.price_change_percentage_30d_in_currency
+        ? data.price_change_percentage_30d_in_currency
+        : 0
+    ),
+    "1Y": formatPercentage(
+      data.price_change_percentage_1y_in_currency
+        ? data.price_change_percentage_1y_in_currency
+        : 0
+    ),
     "Market Cap": formatLargeNumber(data.market_cap),
   };
 };

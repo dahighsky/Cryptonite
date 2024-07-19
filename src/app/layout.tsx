@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import RecentlyWatched from "@/components/RecentlyWatched";
 import Watchlist from "@/components/Watchlist";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="md:flex min-h-screen">
-          <div className="w-full md:w-3/5 xl:w-2/3 overflow-auto p-4">
+        <Navbar />
+        <div className="md:flex md:gap-10 min-h-screen px-2 sm:px-6 md:px-16">
+          <div className="w-full md:w-3/5 xl:w-2/3 overflow-auto py-4">
             {/* <Navigation /> */}
             <main>{children}</main>
           </div>
-          <div className="w-full md:w-2/5 xl:w-1/3 min-w-96 bg-gray-100 p-4 overflow-auto">
+          <div className="w-full md:w-2/5 xl:w-1/3 min-w-96 bg-gray-100 py-4 overflow-auto">
             <div className="mb-6">
               <RecentlyWatched />
             </div>

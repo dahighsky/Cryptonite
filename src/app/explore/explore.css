@@ -1,0 +1,6 @@
+.active{
+    @apply
+    border-[1px]
+    border-blue
+    text-blue
+}
