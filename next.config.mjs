@@ -12,6 +12,7 @@ const nextConfig = {
     loader: "custom",
     loaderFile: "src/lib/utils/image-loader.js",
   },
+  reactStrictMode: false,
 };
 
 export default nextConfig;

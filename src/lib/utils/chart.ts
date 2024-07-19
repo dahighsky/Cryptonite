@@ -1,5 +1,4 @@
 import { ChartOptions } from "chart.js";
-
 export interface ChartCoinData {
   id: string;
   symbol: string;
@@ -19,6 +18,7 @@ export interface Dataset {
 export const prepareChartData = (
   data: ChartCoinData[]
 ): [datasets: Dataset[], labels: string[]] => {
+  console.log(data[0].prices);
   const labels = data[0].prices.map((price) => {
     const date = new Date(price[0]);
     return date.toLocaleTimeString([], {

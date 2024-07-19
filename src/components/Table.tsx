@@ -3,6 +3,7 @@ import Image from "next/image";
 import { transformCoinData } from "@/lib/utils/data-tansform";
 import { CoinData, TransformedCoinData } from "@/lib/models/coin-data.model";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface TableProps {
   title?: string;
@@ -21,6 +22,7 @@ const Table = ({
   outerBorder = true,
   innerBorder = false,
 }: TableProps) => {
+  const router = useRouter();
   // const tableHead = tableHead.filter((item) => item !== "image");
   if (!tableData || tableData.length === 0) {
     return <p>No data available</p>;
@@ -69,8 +71,11 @@ const Table = ({
               <tr
                 key={idx}
                 className={
-                  innerBorder ? "border-b-[1px] border-border-light-gray" : ""
+                  innerBorder
+                    ? "border-b-[1px] border-border-light-gray cursor-pointer"
+                    : ""
                 }
+                onClick={() => router.push(`/coin/${item.id}`)}
               >
                 {tableHead.map((key, index) => {
                   return (
