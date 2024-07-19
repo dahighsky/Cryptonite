@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { transformCoinData } from "@/lib/utils/data-tansform";
 import { CoinData, TransformedCoinData } from "@/lib/models/coin-data.model";
+import Link from "next/link";
 
 interface TableProps {
   title?: string;
@@ -41,7 +42,9 @@ const Table = ({
         <div className="flex justify-between font-semibold mb-4">
           {title && <div>{title}</div>}
           {viewMore && (
-            <div className="text-xs text-primary">View More Coins</div>
+            <Link href="/explore" className="text-xs text-primary">
+              View More Coins
+            </Link>
           )}
         </div>
       )}

@@ -23,7 +23,6 @@ export default function RootLayout({
         <Navbar />
         <div className="md:flex md:gap-10 min-h-screen px-2 sm:px-6 md:px-16">
           <div className="w-full md:w-3/5 xl:w-2/3 overflow-auto py-4">
-            {/* <Navigation /> */}
             <main>{children}</main>
           </div>
           <div className="w-full md:w-2/5 xl:w-1/3 min-w-96 bg-gray-100 py-4 overflow-auto">
