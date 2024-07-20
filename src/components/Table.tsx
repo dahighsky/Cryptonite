@@ -74,7 +74,7 @@ const Table = ({
         <div className="space-y-4">
           {_tableData.map((item, idx) => (
             <div key={idx} className="bg-white p-4 rounded shadow">
-              <div className="flex items-center mb-2">
+              <div className="flex items-center mb-1 pb-3 border-b-[1px] border-border-light-gray">
                 <Image
                   src={item.image}
                   alt={item.Token}
