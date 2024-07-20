@@ -1,0 +1,6 @@
+h2{
+    @apply
+    text-xl
+    font-semibold
+    py-4
+}

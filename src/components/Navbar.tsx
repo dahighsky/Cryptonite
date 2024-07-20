@@ -25,7 +25,14 @@ const Navbar = () => {
           className="w-full px-1 py-[6px] active:outline-none focus:outline-none border-none"
         />
       </div>
-      {/* <div>Change Theme</div> */}
+      <div>
+        <Image
+          src={"/icons/light-theme-switch.svg"}
+          alt={"search"}
+          width={36}
+          height={36}
+        />
+      </div>
     </div>
   );
 };

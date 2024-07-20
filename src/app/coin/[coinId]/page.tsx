@@ -18,6 +18,8 @@ import {
   Legend,
   ChartOptions,
 } from "chart.js";
+import Header from "./Header";
+import CoinBody from "./CoinBody";
 
 ChartJS.register(
   CategoryScale,
@@ -136,26 +138,8 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
   return (
     <>
       {data && (
-        <div>
-          <div className="flex justify-between items-end">
-            <div>
-              <div className="border-solid border-[1px] border-gray-light rounded-[4px] text-xs p-1 w-fit">
-                <Image
-                  src={data.image.small}
-                  alt={"search"}
-                  width={28}
-                  height={28}
-                />
-              </div>
-              <div>{data?.name}</div>
-              <div className="flex gap-2">
-                <div>{formatCurrency(data?.market_data.current_price.usd)}</div>
-                <div>{data?.market_data.price_change_percentage_24h}</div>
-                <div>{data?.market_data.price_change_24h} Today</div>
-              </div>
-            </div>
-            <div>Add to Watchlist</div>
-          </div>
+        <div className="flex flex-col gap-4 justify-center items-stretch">
+          <Header data={data} />
           <div
             ref={chartContainerRef}
             className="w-full h-[480px] xxl:h-[720px] border-[1px] border-border-light-gray rounded-md p-5"
@@ -180,71 +164,7 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
               })}
             </div>
           </div>
-          <div>
-            <h2>Performance</h2>
-            <div className="flex justify-between items-center gap-3">
-              <div className="flex-shrink-0">
-                <div>Today&apos;s Low</div>
-                <div>{data.market_data.low_24h.usd}</div>
-              </div>
-              <div className="relative w-full flex-shrink-[2]">
-                <div className="w-full h-3 min-h-3 bg-blue rounded-full"></div>
-                <div
-                  style={{
-                    left:
-                      (
-                        ((data.market_data.current_price.usd -
-                          data.market_data.low_24h.usd) /
-                          (data.market_data.high_24h.usd -
-                            data.market_data.low_24h.usd)) *
-                        100
-                      ).toFixed(0) + `%`,
-                  }}
-                  className={`absolute top-3`}
-                >
-                  {" "}
-                  ||{" "}
-                </div>
-              </div>
-              <div className="flex-shrink-0">
-                <div>Today&apos;s High</div>
-                <div>{data.market_data.high_24h.usd}</div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h3>Fundamentals</h3>
-            <div>
-              <div className="flex justify-between border-b-[1px] border-border-light-gray">
-                <div>Total Market Cap</div>
-                <div>{data.market_data.market_cap.usd}</div>
-              </div>
-              <div className="flex justify-between border-b-[1px] border-border-light-gray">
-                <div>Total Market Cap</div>
-                <div>{data.market_data.market_cap.usd}</div>
-              </div>
-              <div className="flex justify-between border-b-[1px] border-border-light-gray">
-                <div>Total Market Cap</div>
-                <div>{data.market_data.market_cap.usd}</div>
-              </div>
-              <div className="flex justify-between border-b-[1px] border-border-light-gray">
-                <div>Total Market Cap</div>
-                <div>{data.market_data.market_cap.usd}</div>
-              </div>
-              <div className="flex justify-between border-b-[1px] border-border-light-gray">
-                <div>Total Market Cap</div>
-                <div>{data.market_data.market_cap.usd}</div>
-              </div>
-              <div className="flex justify-between border-b-[1px] border-border-light-gray">
-                <div>Total Market Cap</div>
-                <div>{data.market_data.market_cap.usd}</div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h3>About {data.name}</h3>
-            <p dangerouslySetInnerHTML={{ __html: data.description.en }}></p>
-          </div>
+          <CoinBody data={data} />
         </div>
       )}
     </>
