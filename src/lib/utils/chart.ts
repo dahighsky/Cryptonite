@@ -29,8 +29,8 @@ export const prepareChartData = (
     label: coin.symbol.toUpperCase(),
     data: coin.prices.map((price) => price[1]),
     borderColor: ["#FF4DCA", "#F68D7D", "#23DBBD"][index],
-    backgroundColor: ["#FF4DCA", "#F68D7D", "#23DBBD"][index],
-    fill: false,
+    backgroundColor: ["#FF4DCA20", "#F68D7D20", "#23DBBD20"][index],
+    fill: true,
     // pointBackgroundColor: "rgba(0, 0, 0, 0)",
     // pointBorderColor: "rgba(0, 0, 0, 0)",
     pointRadius: 0,
@@ -41,6 +41,11 @@ export const prepareChartData = (
 export const options: ChartOptions<"line"> = {
   responsive: true,
   maintainAspectRatio: false,
+  elements: {
+    line: {
+      tension: 0.4,
+    },
+  },
   plugins: {
     legend: {
       position: "top" as const,

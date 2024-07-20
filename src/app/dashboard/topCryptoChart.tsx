@@ -12,7 +12,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartOptions,
+  Filler,
 } from "chart.js";
 import { prepareChartData, options, Dataset } from "@/lib/utils/chart";
 
@@ -23,7 +23,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 const TopCryptoChart = () => {

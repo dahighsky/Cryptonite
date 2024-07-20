@@ -1,16 +1,19 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <div className="flex justify-between items-center py-4 px-2 sm:px-6 md:px-16">
-      <div className="border-solid border-[1px] border-gray-light rounded-[4px] text-xs p-2">
-        <Image
-          src={"/icons/light-logo.svg"}
-          alt={"search"}
-          width={36}
-          height={36}
-        />
-      </div>
+    <div className="flex justify-between items-center py-4 px-2 sm:px-6 md:px-16 sticky z-40 top-0 bg-[#ffffff]">
+      <Link href={"/"}>
+        <div className="border-solid border-[1px] border-gray-light rounded-[4px] text-xs p-2">
+          <Image
+            src={"/icons/light-logo.svg"}
+            alt={"search"}
+            width={36}
+            height={36}
+          />
+        </div>
+      </Link>
       <div className="w-2/3 sm:w-1/2 md:w-1/3  border-solid border-[1px] border-gray-light rounded-[4px] text-xs px-3 flex">
         <Image
           src={"/icons/search.svg"}
