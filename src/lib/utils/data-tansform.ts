@@ -1,4 +1,8 @@
-import { CoinData, TransformedCoinData } from "../models/coin-data.model";
+import {
+  CoinData,
+  TransformedCoinData,
+  TrendingCoinData,
+} from "../models/coin-data.model";
 
 export const formatCurrency = (value: number): string => {
   return new Intl.NumberFormat("en-US", {
@@ -50,5 +54,24 @@ export const transformCoinData = (data: CoinData): TransformedCoinData => {
         : 0
     ),
     "Market Cap": formatLargeNumber(data.market_cap),
+  };
+};
+
+export const transformTrendingCoinData = (
+  data: TrendingCoinData
+): TransformedCoinData => {
+  return {
+    id: data.item.id,
+    image: data.item.thumb,
+    Symbol: data.item.symbol.toLocaleUpperCase(),
+    Token: data.item.name,
+    "Last Price": formatCurrency(data.item.data.price),
+    "24H Change": formatPercentage(
+      data.item.data.price_change_percentage_24h.usd
+    ),
+    "Market Cap": data.item.data.market_cap,
+    "7D": "0",
+    "30D": "0",
+    "1Y": "0",
   };
 };

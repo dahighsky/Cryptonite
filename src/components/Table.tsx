@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { transformCoinData } from "@/lib/utils/data-tansform";
-import { CoinData, TransformedCoinData } from "@/lib/models/coin-data.model";
+import {
+  transformCoinData,
+  transformTrendingCoinData,
+} from "@/lib/utils/data-tansform";
+import {
+  CoinData,
+  TransformedCoinData,
+  TrendingCoinData,
+} from "@/lib/models/coin-data.model";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -9,7 +16,8 @@ interface TableProps {
   title?: string;
   viewMore?: boolean;
   tableHead: string[];
-  tableData: CoinData[];
+  tableData?: CoinData[];
+  trendingCoinData?: TrendingCoinData[];
   outerBorder?: boolean;
   innerBorder?: boolean;
 }
@@ -17,10 +25,11 @@ interface TableProps {
 const Table = ({
   title = "",
   viewMore = false,
-  tableData,
+  tableData = [],
   tableHead,
   outerBorder = true,
   innerBorder = false,
+  trendingCoinData = [],
 }: TableProps) => {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
@@ -33,13 +42,15 @@ const Table = ({
   }, []);
 
   // const tableHead = tableHead.filter((item) => item !== "image");
-  if (!tableData || tableData.length === 0) {
+
+  const _tableData: TransformedCoinData[] =
+    tableData.length !== 0
+      ? tableData.map((coin) => transformCoinData(coin))
+      : trendingCoinData.map((coin) => transformTrendingCoinData(coin));
+
+  if (_tableData.length === 0) {
     return <p>No data available</p>;
   }
-
-  const _tableData: TransformedCoinData[] = tableData.map((coin) =>
-    transformCoinData(coin)
-  );
 
   return (
     <div
