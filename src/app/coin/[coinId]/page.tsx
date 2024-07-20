@@ -70,7 +70,6 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
   }, []);
 
   const fetchCoinDetails = async () => {
-    console.log("fetching");
     try {
       const response = await axios.get(
         `https://api.coingecko.com/api/v3/coins/${params.coinId}`,
@@ -112,27 +111,27 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
     }
   };
 
-  const handleDays = (days: string) => {
+  const calculateDays = (days: string): string => {
     switch (days) {
       case "1D":
-        setChartDays("1");
-        break;
+        return "1";
       case "1W":
-        setChartDays("7");
-        break;
+        return "7";
       case "1M":
-        setChartDays("30");
-        break;
+        return "30";
       case "3Y":
-        setChartDays("365");
-        break;
+        return "365";
       case "5Y":
-        setChartDays("" + 365 * 5);
-        break;
+        return "" + 365 * 5;
       case "ALL":
-        setChartDays("max");
-        break;
+        return "max";
     }
+    return "1";
+  };
+
+  const handleDays = (days: string) => {
+    const calculated_days = calculateDays(days);
+    setChartDays(calculated_days);
   };
 
   return (
@@ -154,15 +153,20 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
             ) : (
               <p>Loading chart data...</p>
             )}
-            <div>
-              {chartDaysOptions.map((option) => {
-                return (
-                  <button key={option} onClick={() => handleDays(option)}>
-                    {option}
-                  </button>
-                );
-              })}
-            </div>
+          </div>
+          <div className="flex flex-row gap-3 justify-center items-center">
+            {chartDaysOptions.map((option) => {
+              return (
+                <button
+                  key={option}
+                  onClick={() => handleDays(option)}
+                  className={`px-4 py-1 border-[1px] border-border-light-gray rounded-full text-xs font-semibold hover:bg-gray-light
+                    ${chartDays === calculateDays(option) ? "bg-gray" : ""}`}
+                >
+                  {option}
+                </button>
+              );
+            })}
           </div>
           <CoinBody data={data} />
         </div>
