@@ -35,7 +35,7 @@ const Table = ({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    const checkMobile = () => setIsMobile(window.innerWidth < 540);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
@@ -88,10 +88,35 @@ const Table = ({
                   return (
                     <div
                       key={key}
-                      className="flex justify-between text-sm py-1"
+                      className="flex justify-between text-sm py-1 cursor-pointer"
+                      onClick={() => router.push(`/coin/${item.id}`)}
                     >
-                      <span className="text-gray-600">{key}</span>
-                      <span>{item[key]}</span>
+                      <span className="text-secondary">{key}</span>
+                      <span className="font-semibold">
+                        {["24H Change", "7D", "30D", "1Y"].includes(key) ? (
+                          <span
+                            className={
+                              +item[key] > 0 ? "text-green" : "text-orange"
+                            }
+                          >
+                            <Image
+                              src={
+                                +item[key] > 0
+                                  ? "/icons/arrow-up.svg"
+                                  : "/icons/arrow-down.svg"
+                              }
+                              alt={key}
+                              width={18}
+                              height={18}
+                              className="inline-block mr-1"
+                            />
+                            {+item[key] > 0 ? "+" : ""}
+                            {item[key]}%
+                          </span>
+                        ) : (
+                          item[key]
+                        )}
+                      </span>
                     </div>
                   );
                 }
