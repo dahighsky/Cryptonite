@@ -28,7 +28,6 @@ const Trending = () => {
     }
   };
 
-  console.log(trendingCoins);
   return (
     <div>
       <Table

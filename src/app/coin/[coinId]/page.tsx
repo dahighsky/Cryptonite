@@ -141,7 +141,7 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
           <Header data={data} />
           <div
             ref={chartContainerRef}
-            className="w-full h-[480px] xxl:h-[720px] border-[1px] border-border-light-gray rounded-md p-5"
+            className="w-full h-[480px] xxl:h-[720px] border-[1px] border-primary rounded-md p-5"
           >
             {chartData ? (
               <Line
@@ -160,8 +160,10 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
                 <button
                   key={option}
                   onClick={() => handleDays(option)}
-                  className={`px-4 py-1 border-[1px] border-border-light-gray rounded-full text-xs font-semibold hover:bg-gray-light
-                    ${chartDays === calculateDays(option) ? "bg-gray" : ""}`}
+                  className={`px-4 py-1 border-[1px] border-primary rounded-full text-xs font-semibold hover:bg-hover
+                    ${
+                      chartDays === calculateDays(option) ? "bg-secondary" : ""
+                    }`}
                 >
                   {option}
                 </button>

@@ -103,7 +103,7 @@ const TopCryptoChart = () => {
   return (
     <div
       ref={chartContainerRef}
-      className="w-full h-[480px] xxl:h-[720px] border-[1px] border-border-light-gray rounded-md p-5"
+      className="w-full h-[480px] xxl:h-[720px] border-[1px] border-primary rounded-md p-5 bg-secondary"
     >
       {chartData ? (
         <Line

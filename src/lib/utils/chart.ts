@@ -77,7 +77,7 @@ export const options: ChartOptions<"line"> = {
       ticks: {
         callback: (value: number | string) => {
           if (typeof value === "number") {
-            return new Intl.NumberFormat().format(+value.toFixed(0));
+            return new Intl.NumberFormat().format(+value.toFixed(4));
           }
           return value;
         },

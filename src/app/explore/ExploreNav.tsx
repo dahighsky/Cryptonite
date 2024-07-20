@@ -22,7 +22,7 @@ const ExploreNav = ({ activeTab, onTabChange }: ExploreNavProps) => {
   ];
 
   return (
-    <div className="flex space-x-4 mb-4">
+    <div className="flex space-x-4 mb-4 overflow-x-scroll no-scrollbar">
       {tabs.map((tab) => {
         return (
           <button

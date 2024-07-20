@@ -72,7 +72,7 @@ export default function Explore() {
   };
 
   return (
-    <div className="container mx-auto border-[1px] border-border-light-gray rounded-md p-5">
+    <div className="container mx-auto border-[1px] border-primary rounded-md p-5 bg-secondary">
       <ExploreNav activeTab={activeTab} onTabChange={handleTabChange} />
       <Table
         tableData={coins}

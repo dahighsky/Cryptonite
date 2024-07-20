@@ -54,17 +54,15 @@ const Table = ({
 
   return (
     <div
-      className={
-        outerBorder
-          ? `border-[1px] border-border-light-gray rounded-md p-5`
-          : ""
-      }
+      className={` bg-secondary
+        ${outerBorder ? `border-[1px] border-primary rounded-md p-5` : ""}
+      `}
     >
       {(viewMore || title) && (
         <div className="flex justify-between font-semibold mb-4">
           {title && <div>{title}</div>}
           {viewMore && (
-            <Link href="/explore" className="text-xs text-primary">
+            <Link href="/explore" className="text-xs text-blue">
               View More Coins
             </Link>
           )}
@@ -74,7 +72,7 @@ const Table = ({
         <div className="space-y-4">
           {_tableData.map((item, idx) => (
             <div key={idx} className="bg-white p-4 rounded shadow">
-              <div className="flex items-center mb-1 pb-3 border-b-[1px] border-border-light-gray">
+              <div className="flex items-center mb-1 pb-3 border-b-[1px] border-primary">
                 <Image
                   src={item.image}
                   alt={item.Token}
@@ -128,7 +126,7 @@ const Table = ({
       {!isMobile && (
         <table className="w-full">
           <thead>
-            <tr className="border-b-[1px] border-border-light-gray">
+            <tr className="border-b-[1px] border-primary">
               {tableHead.map((item, index) => {
                 return (
                   <th
@@ -146,18 +144,19 @@ const Table = ({
               return (
                 <tr
                   key={idx}
-                  className={
-                    innerBorder
-                      ? "border-b-[1px] border-border-light-gray cursor-pointer"
-                      : ""
-                  }
+                  className={`rounded-md cursor-pointer hover:bg-hover hover:scale-[102%] transition-transform ease-in-out 
+                    ${innerBorder ? "border-b-[1px] border-primary" : ""}
+                  `}
                   onClick={() => router.push(`/coin/${item.id}`)}
                 >
                   {tableHead.map((key, index) => {
                     return (
-                      <td key={index} className="text-xs py-3">
+                      <td
+                        key={index}
+                        className="text-xs py-3 bg-opacity-0 first-of-type:rounded-l-md last-of-type:rounded-r-md"
+                      >
                         {key === "Token" ? (
-                          <span className="flex items-center">
+                          <span className="flex items-center px-1">
                             <Image
                               src={item["image"]}
                               alt={key}

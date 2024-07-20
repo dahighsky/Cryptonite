@@ -6,9 +6,10 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     colors: {
-      blue: "#1fb6ff",
+      blue: "#4F76FC",
       pink: "#ff49db",
       orange: "#EB5757",
       green: "#1AAF55",
@@ -25,9 +26,18 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       textColor: {
-        primary: "#2752E7",
-        secondary: "#A9A9A9",
-        body: "#000000",
+        primary: "var(--text-primary)",
+        secondary: "var(--text-secondary)",
+        body: "var(--text-body)",
+      },
+      backgroundColor: {
+        primary: "var(--background-primary)",
+        secondary: "var(--background-secondary)",
+        hover: "var(--background-hover)",
+      },
+      borderColor: {
+        primary: "var(--border-primary)",
+        secondary: "var(--border-secondary)",
       },
     },
   },

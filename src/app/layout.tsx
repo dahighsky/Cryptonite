@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className=" w-full">
+        <div className="w-full">
           <Navbar />
           <div className="lg:flex items-start md:gap-10 min-h-screen px-2 sm:px-6 md:px-16">
             <div className="w-full lg:w-3/5 xl:w-2/3 overflow-auto py-4">

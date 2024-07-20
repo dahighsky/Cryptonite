@@ -6,7 +6,7 @@ const Header = ({ data }: { data: CoinDataDetailed }) => {
   return (
     <div className="flex justify-between items-end">
       <div>
-        <div className="border-solid border-[1px] border-gray-light rounded-[4px] text-xs p-1 w-fit">
+        <div className="border-solid border-[1px] border-primary rounded-[4px] text-xs p-1 w-fit">
           <Image src={data.image.small} alt={"search"} width={26} height={26} />
         </div>
         <h1 className=" font-semibold text-secondary pt-1">{data?.name}</h1>

@@ -25,7 +25,7 @@ const fundamentals: FundamentalTuple[] = [
 const CoinBody = ({ data }: { data: any }) => {
   return (
     <div>
-      <div className="border-b-[1px] border-border-light-gray py-3">
+      <div className="border-b-[1px] border-primary py-3">
         <h2>Performance</h2>
         <div className="flex justify-between items-center gap-3 py-3">
           <div className="flex-shrink-0">
@@ -64,14 +64,14 @@ const CoinBody = ({ data }: { data: any }) => {
           </div>
         </div>
       </div>
-      <div className="border-b-[1px] border-border-light-gray py-3 pb-6">
+      <div className="border-b-[1px] border-primary py-3 pb-6">
         <h2>Fundamentals</h2>
         <div className="font-semibold w-fit text-sm">
           {fundamentals.map((fundamental) => {
             return (
               <div
                 key={fundamental[1]}
-                className="flex justify-between border-b-[1px] border-border-light-gray gap-20 py-2"
+                className="flex justify-between border-b-[1px] border-primary gap-20 py-2"
               >
                 <div className="text-secondary">{fundamental[0]}</div>
                 <div>
