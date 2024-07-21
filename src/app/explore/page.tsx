@@ -5,6 +5,7 @@ import axios from "axios";
 import ExploreNav from "./ExploreNav";
 import Table from "@/components/Table";
 import { CoinData } from "@/lib/models/coin-data.model";
+import { useCryptoStore } from "@/lib/hooks/zustand-store";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -20,6 +21,8 @@ export default function Explore() {
   const [coins, setCoins] = useState<CoinData[]>([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  const { watchlist, recentlyWatched } = useCryptoStore();
 
   useEffect(() => {
     fetchCoins();
@@ -39,9 +42,6 @@ export default function Explore() {
 
       switch (activeTab) {
         case "Watchlist":
-          const watchlist = JSON.parse(
-            localStorage.getItem("watchlist") || "[]"
-          );
           params.ids = watchlist.join(",");
           break;
         case "Top Gainers":
@@ -51,9 +51,6 @@ export default function Explore() {
           params.order = "price_change_percentage_24h_asc";
           break;
         case "Recently Watched":
-          const recentlyWatched = JSON.parse(
-            localStorage.getItem("recentlyWatched") || "[]"
-          );
           params.ids = recentlyWatched.join(",");
           break;
       }
