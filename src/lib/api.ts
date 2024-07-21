@@ -4,7 +4,6 @@ export async function getData(coinIds: string[]) {
   const params = new URLSearchParams({
     vs_currency: "usd",
     ids: coinIds.join(","),
-    order: "market_cap_desc",
     per_page: coinIds.length.toString(),
     page: "1",
     sparkline: "false",

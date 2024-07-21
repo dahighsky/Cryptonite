@@ -2,56 +2,33 @@
 
 import Table from "@/components/Table";
 import { getData } from "@/lib/api";
+import { useCryptoStore } from "@/lib/hooks/zustand-store";
 import { CoinData } from "@/lib/models/coin-data.model";
-import {
-  coinsBasicData,
-  coinsBasicHeading,
-} from "@/mock-data/coins-basic.data";
 import { useEffect, useState } from "react";
-
-const DEFAULT_WATCHLIST = ["bitcoin", "ethereum", "0chain", "dogecoin"];
+import { useStore } from "zustand";
 
 const RecentlyWatched = () => {
-  const [watchlist, setWatchlist] = useState<string[]>([]);
+  const recentlyWatched = useStore(
+    useCryptoStore,
+    (state) => state.recentlyWatched
+  );
   const [data, setData] = useState<CoinData[]>([]);
 
   useEffect(() => {
-    const savedWatchlistString = localStorage.getItem("watchlist");
-    let savedWatchlist: string[] = [];
-
-    if (savedWatchlistString) {
-      try {
-        const parsed = JSON.parse(savedWatchlistString);
-        if (
-          Array.isArray(parsed) &&
-          parsed.every((item) => typeof item === "string")
-        ) {
-          savedWatchlist = parsed;
-        }
-      } catch (error) {
-        console.error("Error parsing watchlist from localStorage:", error);
-      }
-    }
-
-    if (savedWatchlist.length === 0) {
-      savedWatchlist = DEFAULT_WATCHLIST;
-      localStorage.setItem("watchlist", JSON.stringify(DEFAULT_WATCHLIST));
-    }
-
-    setWatchlist(savedWatchlist);
-  }, []);
-
-  useEffect(() => {
-    if (watchlist.length > 0) {
+    console.log("recentlyWatched changed:", recentlyWatched);
+    if (recentlyWatched.length > 0) {
       const fetchData = async () => {
-        const result = await getData(watchlist);
+        const result = await getData(recentlyWatched);
         setData(result);
       };
       fetchData();
-      // const interval = setInterval(fetchData, 60000);
-      // return () => clearInterval(interval);
     }
-  }, [watchlist]);
+  }, [recentlyWatched]);
+
+  const handleDragStart = (e: React.DragEvent, item: string) => {
+    console.log("dragging", item);
+    e.dataTransfer.setData("text/plain", JSON.stringify(item));
+  };
 
   return (
     <div>
@@ -60,6 +37,8 @@ const RecentlyWatched = () => {
         viewMore={true}
         tableData={data}
         tableHead={["Token", "Last Price", "24H Change", "Market Cap"]}
+        onDragStart={handleDragStart}
+        isDraggable={true}
       ></Table>
     </div>
   );

@@ -16,10 +16,11 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartOptions,
+  Filler,
 } from "chart.js";
 import Header from "./Header";
 import CoinBody from "./CoinBody";
+import { useCryptoStore } from "@/lib/hooks/zustand-store";
 
 ChartJS.register(
   CategoryScale,
@@ -28,10 +29,12 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 const CoinDetails = ({ params }: { params: { coinId: string } }) => {
+  const { recentlyWatched, addToRecentlyWatched } = useCryptoStore();
   const [data, setData] = useState<CoinDataDetailed>();
   const [chartData, setChartData] = useState<any>(null);
   const [chartDimensions, setChartDimensions] = useState({
@@ -44,6 +47,10 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
   const chartDaysOptions = ["1D", "1W", "1M", "3Y", "5Y", "ALL"];
 
   useEffect(() => {
+    if (recentlyWatched.indexOf(params.coinId) === -1) {
+      console.log("Adding to recently watched");
+      addToRecentlyWatched(params.coinId);
+    }
     fetchCoinDetails();
     fetchChartData(chartDays);
   }, [params.coinId]);

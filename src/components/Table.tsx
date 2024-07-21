@@ -20,6 +20,10 @@ interface TableProps {
   trendingCoinData?: TrendingCoinData[];
   outerBorder?: boolean;
   innerBorder?: boolean;
+  onDragStart?: (e: React.DragEvent, item: string) => void;
+  onDragOver?: (e: React.DragEvent) => void;
+  onDrop?: (e: React.DragEvent) => void;
+  isDraggable?: boolean;
 }
 
 const Table = ({
@@ -30,6 +34,10 @@ const Table = ({
   outerBorder = true,
   innerBorder = false,
   trendingCoinData = [],
+  onDragStart,
+  onDragOver,
+  onDrop,
+  isDraggable = false,
 }: TableProps) => {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
@@ -148,6 +156,10 @@ const Table = ({
                     ${innerBorder ? "border-b-[1px] border-primary" : ""}
                   `}
                   onClick={() => router.push(`/coin/${item.id}`)}
+                  draggable={isDraggable}
+                  onDragStart={(e) => onDragStart && onDragStart(e, item.id)}
+                  onDragOver={onDragOver}
+                  onDrop={onDrop}
                 >
                   {tableHead.map((key, index) => {
                     return (

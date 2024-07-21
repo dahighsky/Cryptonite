@@ -71,6 +71,11 @@ export default function Explore() {
     setPage(1);
   };
 
+  const handleDragStart = (e: React.DragEvent, item: string) => {
+    console.log("dragging", item);
+    e.dataTransfer.setData("text/plain", JSON.stringify(item));
+  };
+
   return (
     <div className="container mx-auto border-[1px] border-primary rounded-md p-5 bg-secondary">
       <ExploreNav activeTab={activeTab} onTabChange={handleTabChange} />
@@ -88,6 +93,8 @@ export default function Explore() {
         ]}
         outerBorder={false}
         innerBorder={true}
+        onDragStart={handleDragStart}
+        isDraggable={true}
       />
       <div className="flex justify-between my-4">
         <button
