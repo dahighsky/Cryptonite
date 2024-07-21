@@ -35,11 +35,22 @@ const TopCryptoChart = () => {
   });
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
+  const [apiKey, setApiKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchApiKey() {
+      const response = await fetch("/api/getApiKey");
+      const data = await response.json();
+      setApiKey(data.apiKey);
+    }
+    fetchApiKey();
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://api.coingecko.com/api/v3/coins/markets",
+          "https://pro-api.coingecko.com/api/v3/coins/markets",
           {
             params: {
               vs_currency: "usd",
@@ -47,6 +58,7 @@ const TopCryptoChart = () => {
               per_page: 3,
               page: 1,
               sparkline: false,
+              "x-cg-pro-api-key": apiKey,
             },
           }
         );
@@ -57,11 +69,12 @@ const TopCryptoChart = () => {
         const priceData = await Promise.all(
           topCoins.map(async (coinId: string, index: number) => {
             const response = await axios.get(
-              `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart`,
+              `https://pro-api.coingecko.com/api/v3/coins/${coinId}/market_chart`,
               {
                 params: {
                   vs_currency: "usd",
                   days: 1,
+                  "x-cg-pro-api-key": apiKey,
                 },
               }
             );

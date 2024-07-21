@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import axios from "axios";
 import { CoinData } from "../models/coin-data.model";
+import { getRandomApiKey } from "../utils/apiKeyUtils";
+import { api } from "../api";
 
 interface CoinStore {
   watchlist: string[];
@@ -19,18 +21,22 @@ interface CoinStore {
 const DEFAULT_WATCHLIST = ["turbo", "zksync", "solana", "ethereum"];
 const DEFAULT_RECENTLY_WATCHED = ["maga", "kaspa", "ethereum"];
 
+async function fetchApiKey() {
+  const response = await fetch("/api/getApiKey");
+  const data = await response.json();
+  return data;
+}
+
 const fetchCoinData = async (coinIds: string[]): Promise<CoinData[]> => {
   try {
-    console.log("fetching", coinIds);
-    const response = await axios.get(
-      `https://api.coingecko.com/api/v3/coins/markets`,
-      {
-        params: {
-          vs_currency: "usd",
-          ids: coinIds.join(","),
-        },
-      }
-    );
+    const apiKey = getRandomApiKey();
+    const response = await api.get(`/coins/markets`, {
+      params: {
+        vs_currency: "usd",
+        ids: coinIds.join(","),
+      },
+      headers: {},
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching coin data:", error);

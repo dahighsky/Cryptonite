@@ -44,6 +44,17 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
   const [chartDays, setChartDays] = useState<string>("1");
   const chartContainerRef = useRef<HTMLDivElement>(null);
 
+  const [apiKey, setApiKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchApiKey() {
+      const response = await fetch("/api/getApiKey");
+      const data = await response.json();
+      setApiKey(data.apiKey);
+    }
+    fetchApiKey();
+  }, []);
+
   const chartDaysOptions = ["1D", "1W", "1M", "3Y", "5Y", "ALL"];
 
   useEffect(() => {
@@ -79,10 +90,11 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
   const fetchCoinDetails = async () => {
     try {
       const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${params.coinId}`,
+        `https://pro-api.coingecko.com/api/v3/coins/${params.coinId}`,
         {
           params: {
             vs_currency: "usd",
+            "x-cg-pro-api-key": apiKey,
           },
         }
       );
@@ -96,7 +108,7 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
   const fetchChartData = async (days: string) => {
     try {
       const response = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${params.coinId}/market_chart`,
+        `https://pro-api.coingecko.com/api/v3/coins/${params.coinId}/market_chart`,
         {
           params: {
             vs_currency: "usd",
