@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
-import { debounce } from "lodash";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,6 +18,7 @@ const CoinSearch = () => {
   const [coins, setCoins] = useState<SearchCoin[]>([]);
   const [showResults, setShowResults] = useState(false);
   const router = useRouter();
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -49,10 +49,14 @@ const CoinSearch = () => {
     }
   };
 
-  const debouncedSearch = useCallback(
-    debounce((term: string) => searchCoins(term), 3000),
-    []
-  );
+  const debouncedSearch = useCallback((term: string) => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    debounceTimerRef.current = setTimeout(() => {
+      searchCoins(term);
+    }, 3000);
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value;
