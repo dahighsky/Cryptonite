@@ -4,6 +4,7 @@ import "./globals.css";
 import RecentlyWatched from "@/components/RecentlyWatched";
 import Watchlist from "@/components/Watchlist";
 import Navbar from "@/components/Navbar";
+import UserActivity from "./dashboard/UserActivity";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,14 +27,7 @@ export default function RootLayout({
             <div className="w-full lg:w-3/5 xl:w-2/3 overflow-auto py-4">
               <main>{children}</main>
             </div>
-            <div className="w-full lg:w-2/5 xl:w-1/3 min-w-80 bg-gray-100 py-4 md:sticky relative top-20 overflow-auto z-10">
-              <div className="mb-6">
-                <RecentlyWatched />
-              </div>
-              <div>
-                <Watchlist />
-              </div>
-            </div>
+            <UserActivity />
           </div>
         </div>
       </body>

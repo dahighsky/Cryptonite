@@ -1,58 +1,120 @@
-import { stat } from "fs";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
+import axios from "axios";
+import { CoinData } from "../models/coin-data.model";
 
 interface CoinStore {
   watchlist: string[];
   recentlyWatched: string[];
+  watchlistData: CoinData[];
+  recentlyWatchedData: CoinData[];
   addToWatchlist: (coinId: string) => void;
   addToRecentlyWatched: (coinId: string) => void;
   removeFromWatchlist: (coinId: string) => void;
+  fetchWatchlistData: () => Promise<void>;
+  fetchRecentlyWatchedData: () => Promise<void>;
+  initializeStore: () => void;
 }
+
+const DEFAULT_WATCHLIST = ["turbo", "zksync", "solana", "ethereum"];
+const DEFAULT_RECENTLY_WATCHED = ["maga", "kaspa", "ethereum"];
+
+const fetchCoinData = async (coinIds: string[]): Promise<CoinData[]> => {
+  try {
+    console.log("fetching", coinIds);
+    const response = await axios.get(
+      `https://api.coingecko.com/api/v3/coins/markets`,
+      {
+        params: {
+          vs_currency: "usd",
+          ids: coinIds.join(","),
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching coin data:", error);
+    return [];
+  }
+};
 
 export const useCryptoStore = create<CoinStore>()(
   persist(
     (set, get) => ({
-      watchlist: ["bitcoin", "ethereum", "0chain", "dogecoin"],
-      recentlyWatched: ["bitcoin", "ethereum", "0chain", "dogecoin"],
+      watchlist: DEFAULT_WATCHLIST,
+      recentlyWatched: DEFAULT_RECENTLY_WATCHED,
+      watchlistData: [],
+      recentlyWatchedData: [],
       addToWatchlist: (coinId) => {
         set((state) => {
           if (!state.watchlist.includes(coinId)) {
-            state.watchlist.push(coinId);
-            return { watchlist: state.watchlist };
+            console.log("Adding to watchlist in store", coinId);
+            const newWatchlist = [...state.watchlist, coinId];
+            return { watchlist: newWatchlist };
           }
           return state;
         });
+
+        get().fetchWatchlistData();
       },
       addToRecentlyWatched: (coinId) => {
         set((state) => {
-          console.log("Adding to recently watched");
+          let newRecentlyWatched;
+          console.log("adding to recently watched", coinId);
           if (state.recentlyWatched.includes(coinId)) {
-            state.recentlyWatched
-              .splice(state.recentlyWatched.indexOf(coinId), 1)
-              .unshift(coinId);
-            console.log("Recently watched:", state.recentlyWatched);
-            return {
-              recentlyWatched: state.recentlyWatched,
-            };
+            newRecentlyWatched = [
+              coinId,
+              ...state.recentlyWatched.filter((id) => id !== coinId),
+            ];
           } else {
-            state.recentlyWatched.unshift(coinId);
-            console.log("Recently watched:", state.recentlyWatched);
-            return {
-              recentlyWatched: state.recentlyWatched,
-            };
+            newRecentlyWatched = [coinId, ...state.recentlyWatched].slice(
+              0,
+              10
+            );
           }
+          return { recentlyWatched: newRecentlyWatched };
         });
+
+        get().fetchRecentlyWatchedData();
       },
       removeFromWatchlist: (coinId) => {
         set((state) => {
-          return { watchlist: state.watchlist.filter((id) => id !== coinId) };
+          const newWatchlist = state.watchlist.filter((id) => id !== coinId);
+          get().fetchWatchlistData();
+          return { watchlist: newWatchlist };
         });
+      },
+      fetchWatchlistData: async () => {
+        const watchlist = get().watchlist;
+        const watchlistData = await fetchCoinData(watchlist);
+        set({ watchlistData });
+      },
+      fetchRecentlyWatchedData: async () => {
+        const recentlyWatched = get().recentlyWatched;
+        console.log("fetching recentlyWatched using", recentlyWatched);
+        const recentlyWatchedData = await fetchCoinData(recentlyWatched);
+        set({ recentlyWatchedData });
+      },
+      initializeStore: () => {
+        const state = get();
+        if (!state.watchlist || state.watchlist.length === 0) {
+          set({ watchlist: DEFAULT_WATCHLIST });
+        }
+        if (!state.recentlyWatched || state.recentlyWatched.length === 0) {
+          set({ recentlyWatched: DEFAULT_RECENTLY_WATCHED });
+        }
+        console.log("fetching while initialising");
+        get().fetchWatchlistData();
+        get().fetchRecentlyWatchedData();
       },
     }),
     {
       name: "crypto-storage",
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        watchlist: state.watchlist,
+        recentlyWatched: state.recentlyWatched,
+      }),
     }
   )
 );
