@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { cacheData, getCachedData } from "../utils/cache";
+import { api } from "../api";
 
 interface ApiOptions {
   url: string;
