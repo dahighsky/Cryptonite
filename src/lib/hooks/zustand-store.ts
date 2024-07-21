@@ -30,6 +30,7 @@ const fetchCoinData = async (
       params: {
         vs_currency: "usd",
         ids: coinIds.join(","),
+        "x-cg-pro-api-key": process.env.COINGECKO_API_KEY,
       },
     });
     return response.data;
@@ -95,7 +96,6 @@ export const useCryptoStore = create<CoinStore>()(
       },
       fetchRecentlyWatchedData: async () => {
         const recentlyWatched = get().recentlyWatched;
-        console.log("fetching recentlyWatched using", recentlyWatched);
         const recentlyWatchedData = await fetchCoinData(
           recentlyWatched,
           get().recentlyWatchedData
@@ -110,7 +110,6 @@ export const useCryptoStore = create<CoinStore>()(
         if (!state.recentlyWatched || state.recentlyWatched.length === 0) {
           set({ recentlyWatched: DEFAULT_RECENTLY_WATCHED });
         }
-        console.log("fetching while initialising");
         get().fetchWatchlistData();
         get().fetchRecentlyWatchedData();
       },

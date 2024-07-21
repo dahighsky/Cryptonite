@@ -3,6 +3,7 @@
 import Table from "@/components/Table";
 import { TrendingCoinData } from "@/lib/models/coin-data.model";
 import { useEffect, useState } from "react";
+import Loading from "./Loading";
 
 const Trending = () => {
   const [trendingCoins, setTrendingCoins] = useState<TrendingCoinData[]>([]);
@@ -35,20 +36,24 @@ const Trending = () => {
 
   return (
     <div>
-      <Table
-        title={"Trending Coins"}
-        viewMore={true}
-        trendingCoinData={trendingCoins}
-        tableHead={[
-          "Token",
-          "Symbol",
-          "Last Price",
-          "24H Change",
-          "Market Cap",
-        ]}
-        onDragStart={handleDragStart}
-        isDraggable={true}
-      ></Table>
+      {isLoading ? (
+        <Loading height={56} width={56} />
+      ) : (
+        <Table
+          title={"Trending Coins"}
+          viewMore={true}
+          trendingCoinData={trendingCoins}
+          tableHead={[
+            "Token",
+            "Symbol",
+            "Last Price",
+            "24H Change",
+            "Market Cap",
+          ]}
+          onDragStart={handleDragStart}
+          isDraggable={true}
+        ></Table>
+      )}
     </div>
   );
 };

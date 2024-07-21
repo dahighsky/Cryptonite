@@ -1,12 +1,13 @@
 "use client";
-
-import { useEffect, useState } from "react";
 import Table from "@/components/Table";
 import { useCryptoStore } from "@/lib/hooks/zustand-store";
-import { CoinData } from "@/lib/models/coin-data.model";
+import Loading from "./Loading";
+import { useState } from "react";
 
 const Watchlist = () => {
   const { watchlist, watchlistData, addToWatchlist } = useCryptoStore();
+
+  console.log(watchlistData);
 
   // const [isLoading, setIsLoading] = useState(true);
 

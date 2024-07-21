@@ -11,6 +11,7 @@ import {
 } from "@/lib/models/coin-data.model";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ZeroState from "./ZeroState";
 
 interface TableProps {
   title?: string;
@@ -57,7 +58,7 @@ const Table = ({
       : trendingCoinData.map((coin) => transformTrendingCoinData(coin));
 
   if (_tableData.length === 0) {
-    return <p>No data available</p>;
+    return <ZeroState height={48} width={48} isRateLimit={true} />;
   }
 
   return (

@@ -22,6 +22,8 @@ import Header from "./Header";
 import CoinBody from "./CoinBody";
 import { useCryptoStore } from "@/lib/hooks/zustand-store";
 import { api } from "@/lib/api";
+import Loading from "@/components/Loading";
+import ZeroState from "@/components/ZeroState";
 
 ChartJS.register(
   CategoryScale,
@@ -38,6 +40,8 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
   const { recentlyWatched, addToRecentlyWatched } = useCryptoStore();
   const [data, setData] = useState<CoinDataDetailed>();
   const [chartData, setChartData] = useState<any>(null);
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [isChartLoading, setIsChartLoading] = useState(true);
   const [chartDimensions, setChartDimensions] = useState({
     width: 0,
     height: 0,
@@ -49,7 +53,6 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
 
   useEffect(() => {
     if (recentlyWatched.indexOf(params.coinId) === -1) {
-      console.log("Adding to recently watched");
       addToRecentlyWatched(params.coinId);
     }
     fetchCoinDetails();
@@ -79,32 +82,28 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
 
   const fetchCoinDetails = async () => {
     try {
-      const response = await api.get(
-        `https://api.coingecko.com/api/v3/coins/${params.coinId}`,
-        {
-          params: {
-            vs_currency: "usd",
-          },
-        }
-      );
+      const response = await api.get(`/coins/${params.coinId}`, {
+        params: {
+          vs_currency: "usd",
+        },
+      });
       const coin: CoinDataDetailed = response.data;
       setData(coin);
+      setIsDataLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setIsDataLoading(false);
     }
   };
 
   const fetchChartData = async (days: string) => {
     try {
-      const response = await api.get(
-        `https://api.coingecko.com/api/v3/coins/${params.coinId}/market_chart`,
-        {
-          params: {
-            vs_currency: "usd",
-            days: days,
-          },
-        }
-      );
+      const response = await api.get(`/coins/${params.coinId}/market_chart`, {
+        params: {
+          vs_currency: "usd",
+          days: days,
+        },
+      });
       const priceData = [
         {
           id: params.coinId,
@@ -114,8 +113,10 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
       ];
       const [datasets, labels] = prepareChartData(priceData);
       setChartData({ labels, datasets });
+      setIsChartLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
+      setIsChartLoading(false);
     }
   };
 
@@ -144,24 +145,32 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
 
   return (
     <>
-      {data && (
-        <div className="flex flex-col gap-4 justify-center items-stretch">
+      <div className="flex flex-col gap-4 justify-center items-stretch">
+        {isDataLoading ? (
+          <Loading height={24} width={24} />
+        ) : data ? (
           <Header data={data} />
-          <div
-            ref={chartContainerRef}
-            className="w-full h-[480px] xxl:h-[720px] border-[1px] border-primary rounded-md p-5"
-          >
-            {chartData ? (
-              <Line
-                options={options}
-                data={chartData}
-                width={chartDimensions.width}
-                height={chartDimensions.height}
-              />
-            ) : (
-              <p>Loading chart data...</p>
-            )}
-          </div>
+        ) : (
+          <ZeroState height={24} width={24} isRateLimit={true} />
+        )}
+        <div
+          ref={chartContainerRef}
+          className="w-full h-[480px] xxl:h-[720px] border-[1px] border-primary rounded-md p-5"
+        >
+          {isChartLoading ? (
+            <Loading height={54} width={54} />
+          ) : chartData ? (
+            <Line
+              options={options}
+              data={chartData}
+              width={chartDimensions.width}
+              height={chartDimensions.height}
+            />
+          ) : (
+            <ZeroState height={54} width={54} isRateLimit={true} />
+          )}
+        </div>
+        {chartData && (
           <div className="flex flex-row gap-3 justify-center items-center">
             {chartDaysOptions.map((option) => {
               return (
@@ -178,9 +187,15 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
               );
             })}
           </div>
+        )}
+        {isDataLoading ? (
+          <Loading height={24} width={24} />
+        ) : data ? (
           <CoinBody data={data} />
-        </div>
-      )}
+        ) : (
+          <ZeroState height={24} width={24} isRateLimit={true} />
+        )}
+      </div>
     </>
   );
 };

@@ -13,6 +13,9 @@ const nextConfig = {
     loaderFile: "src/lib/utils/image-loader.js",
   },
   reactStrictMode: false,
+  env: {
+    COINGECKO_API_KEY: process.env.COINGECKO_API_KEY,
+  },
 };
 
 export default nextConfig;
