@@ -12,7 +12,7 @@ const ZeroState = ({
   return (
     <div className="flex flex-col justify-center items-center w-full h-full bg-secondary gap-2 p-4">
       <Image
-        src={"./icons/light-logo.svg"}
+        src={"/icons/light-logo.svg"}
         height={height}
         width={width}
         alt="loading"

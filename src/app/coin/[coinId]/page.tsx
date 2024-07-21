@@ -55,13 +55,22 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
     if (recentlyWatched.indexOf(params.coinId) === -1) {
       addToRecentlyWatched(params.coinId);
     }
-    fetchCoinDetails();
     fetchChartData(chartDays);
   }, [params.coinId]);
 
   useEffect(() => {
     fetchChartData(chartDays);
   }, [chartDays]);
+
+  useEffect(() => {
+    fetchCoinDetails();
+
+    const intervalId = setInterval(() => {
+      fetchCoinDetails();
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, [params.coinId]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
