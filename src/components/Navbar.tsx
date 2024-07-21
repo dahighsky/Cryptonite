@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import CoinSearch from "./Search";
 
 const Navbar = () => {
   return (
@@ -16,20 +17,7 @@ const Navbar = () => {
           CRYPTOKNIGHT
         </div>
       </Link>
-      <div className="w-2/3 sm:w-1/2 md:w-1/3  border-solid border-[1px] border-primary rounded-[4px] text-xs px-3 flex bg-secondary">
-        <Image
-          src={"/icons/search.svg"}
-          alt={"search"}
-          width={14}
-          height={14}
-          className="inline-block mr-2"
-        />
-        <input
-          type="text"
-          placeholder="Search..."
-          className="w-full px-1 py-[6px] active:outline-none focus:outline-none border-none bg-secondary text-secondary"
-        />
-      </div>
+      <CoinSearch />
       <div>
         <ThemeToggle />
       </div>
