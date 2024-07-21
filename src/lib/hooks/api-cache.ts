@@ -25,7 +25,7 @@ export const useApiWithCache = ({ url, params, cacheKey }: ApiOptions) => {
           return;
         }
 
-        const response = await axios.get(url, { params });
+        const response = await api.get(url, { params });
         setData(response.data);
         cacheData(cacheKey, response.data);
       } catch (err) {

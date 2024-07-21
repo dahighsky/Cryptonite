@@ -1,26 +1,8 @@
-export async function getData(coinIds: string[]) {
-  const options = { method: "GET", headers: { accept: "application/json" } };
+import axios from "axios";
 
-  const params = new URLSearchParams({
-    vs_currency: "usd",
-    ids: coinIds.join(","),
-    per_page: coinIds.length.toString(),
-    page: "1",
-    sparkline: "false",
-  });
-
-  const url = `https://api.coingecko.com/api/v3/coins/markets?${params.toString()}`;
-
-  try {
-    const res = await fetch(url, options);
-
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
-    }
-
-    return res.json();
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-}
+export const api = axios.create({
+  baseURL: "https://api.coingecko.com/api/v3",
+  headers: {
+    "x-cg-pro-api-key": process.env.COINGECKO_API_KEY,
+  },
+});

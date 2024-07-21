@@ -21,6 +21,7 @@ import {
 import Header from "./Header";
 import CoinBody from "./CoinBody";
 import { useCryptoStore } from "@/lib/hooks/zustand-store";
+import { api } from "@/lib/api";
 
 ChartJS.register(
   CategoryScale,
@@ -78,7 +79,7 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
 
   const fetchCoinDetails = async () => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `https://api.coingecko.com/api/v3/coins/${params.coinId}`,
         {
           params: {
@@ -95,7 +96,7 @@ const CoinDetails = ({ params }: { params: { coinId: string } }) => {
 
   const fetchChartData = async (days: string) => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `https://api.coingecko.com/api/v3/coins/${params.coinId}/market_chart`,
         {
           params: {

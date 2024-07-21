@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import axios from "axios";
 import { CoinData } from "../models/coin-data.model";
+import { api } from "../api";
 
 interface CoinStore {
   watchlist: string[];
@@ -19,22 +20,22 @@ interface CoinStore {
 const DEFAULT_WATCHLIST = ["turbo", "zksync", "solana", "ethereum"];
 const DEFAULT_RECENTLY_WATCHED = ["maga", "kaspa", "ethereum"];
 
-const fetchCoinData = async (coinIds: string[]): Promise<CoinData[]> => {
+const fetchCoinData = async (
+  coinIds: string[],
+  lastData: CoinData[]
+): Promise<CoinData[]> => {
   try {
     console.log("fetching", coinIds);
-    const response = await axios.get(
-      `https://api.coingecko.com/api/v3/coins/markets`,
-      {
-        params: {
-          vs_currency: "usd",
-          ids: coinIds.join(","),
-        },
-      }
-    );
+    const response = await api.get(`/coins/markets`, {
+      params: {
+        vs_currency: "usd",
+        ids: coinIds.join(","),
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching coin data:", error);
-    return [];
+    return lastData;
   }
 };
 
@@ -86,13 +87,19 @@ export const useCryptoStore = create<CoinStore>()(
       },
       fetchWatchlistData: async () => {
         const watchlist = get().watchlist;
-        const watchlistData = await fetchCoinData(watchlist);
+        const watchlistData = await fetchCoinData(
+          watchlist,
+          get().watchlistData
+        );
         set({ watchlistData });
       },
       fetchRecentlyWatchedData: async () => {
         const recentlyWatched = get().recentlyWatched;
         console.log("fetching recentlyWatched using", recentlyWatched);
-        const recentlyWatchedData = await fetchCoinData(recentlyWatched);
+        const recentlyWatchedData = await fetchCoinData(
+          recentlyWatched,
+          get().recentlyWatchedData
+        );
         set({ recentlyWatchedData });
       },
       initializeStore: () => {

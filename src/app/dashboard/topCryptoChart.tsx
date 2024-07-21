@@ -15,6 +15,7 @@ import {
   Filler,
 } from "chart.js";
 import { prepareChartData, options, Dataset } from "@/lib/utils/chart";
+import { api } from "@/lib/api";
 
 ChartJS.register(
   CategoryScale,
@@ -38,7 +39,7 @@ const TopCryptoChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
+        const response = await api.get(
           "https://api.coingecko.com/api/v3/coins/markets",
           {
             params: {
@@ -56,7 +57,7 @@ const TopCryptoChart = () => {
           .map((coin: any) => coin.symbol);
         const priceData = await Promise.all(
           topCoins.map(async (coinId: string, index: number) => {
-            const response = await axios.get(
+            const response = await api.get(
               `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart`,
               {
                 params: {

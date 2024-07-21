@@ -5,6 +5,7 @@ import { debounce } from "lodash";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
 
 interface SearchCoin {
   id: string;
@@ -38,7 +39,7 @@ const CoinSearch = () => {
     }
 
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `https://api.coingecko.com/api/v3/search?query=${term}`
       );
       setCoins(response.data.coins);
