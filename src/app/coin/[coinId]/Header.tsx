@@ -1,13 +1,15 @@
+import { useCryptoStore } from "@/lib/hooks/zustand-store";
 import { CoinDataDetailed } from "@/lib/models/coin-data.model";
 import { formatCurrency } from "@/lib/utils/data-tansform";
 import Image from "next/image";
 
 const Header = ({ data }: { data: CoinDataDetailed }) => {
+  const { addToWatchlist } = useCryptoStore();
   return (
     <div className="flex justify-between items-end">
       <div>
         <div className="border-solid border-[1px] border-primary rounded-[4px] text-xs p-1 w-fit">
-          <Image src={data.image.small} alt={"search"} width={26} height={26} />
+          <Image src={data.image.small} alt={"coin"} width={26} height={26} />
         </div>
         <h1 className=" font-semibold text-secondary pt-1">{data?.name}</h1>
         <div className="flex gap-2 justify-between items-center py-1">
@@ -39,7 +41,12 @@ const Header = ({ data }: { data: CoinDataDetailed }) => {
           </div>
         </div>
       </div>
-      <div className="p-2 cursor-pointer flex justify-center items-center">
+      <div
+        className="p-2 cursor-pointer flex justify-center items-center"
+        onClick={() => {
+          addToWatchlist(data.id);
+        }}
+      >
         <Image
           src={"/icons/add.svg"}
           alt={"Add to Watchlist"}

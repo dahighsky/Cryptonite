@@ -18,10 +18,7 @@ const Watchlist = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     const droppedItem: string = JSON.parse(e.dataTransfer.getData("text"));
-
-    console.log(droppedItem, " dropped");
     if (!watchlist.includes(droppedItem)) {
-      console.log("adding to watchlist");
       addToWatchlist(droppedItem);
     }
   };
