@@ -7,6 +7,12 @@
 //   [key: string]: any; // For any additional properties
 // };
 
+export interface MarketChartData {
+  id: string;
+  prices: any;
+  symbol: string;
+}
+
 export interface TrendingCoinData {
   item: {
     id: string;
