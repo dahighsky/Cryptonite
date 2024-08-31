@@ -1,7 +1,7 @@
 import Image from "next/image";
 import TopCryptoChart from "./dashboard/topCryptoChart";
 import RecentlyWatched from "@/components/RecentlyWatched";
-import Trending from "@/components/Trending";
+import Trending from "./dashboard/Trending";
 
 export default function Home() {
   return (
