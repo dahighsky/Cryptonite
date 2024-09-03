@@ -1,9 +1,6 @@
-import Image from "next/image";
-import TopCryptoChart from "./dashboard/topCryptoChart";
-import RecentlyWatched from "@/components/RecentlyWatched";
+import TopCryptoChart from "./dashboard/TopCryptoChart";
 import Trending from "./dashboard/Trending";
-import { getTopCoinsMarketCharts } from "@/lib/utils/fetch-functions";
-import { prepareChartData } from "@/lib/utils/chart";
+import { getChartData } from "@/lib/utils/fetch-functions";
 
 export default async function Home() {
   const chatData = await getChartData();
@@ -13,10 +10,4 @@ export default async function Home() {
       <Trending />
     </div>
   );
-}
-
-async function getChartData() {
-  const topCoinsMarketData = await getTopCoinsMarketCharts();
-  const [datasets, labels] = prepareChartData(topCoinsMarketData);
-  return { labels, datasets };
 }

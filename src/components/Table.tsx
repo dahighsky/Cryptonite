@@ -23,7 +23,7 @@ interface TableProps {
   trendingCoinData?: TrendingCoinData[];
   outerBorder?: boolean;
   innerBorder?: boolean;
-  onDragStart?: (e: React.DragEvent, item: string) => void;
+  // onDragStart?: (e: React.DragEvent, item: string) => void;
   onDragOver?: (e: React.DragEvent) => void;
   onDrop?: (e: React.DragEvent) => void;
   isDraggable?: boolean;
@@ -37,7 +37,7 @@ const Table = ({
   outerBorder = true,
   innerBorder = false,
   trendingCoinData = [],
-  onDragStart,
+  // onDragStart,
   onDragOver,
   onDrop,
   isDraggable = false,
@@ -53,6 +53,11 @@ const Table = ({
   }, []);
 
   // const tableHead = tableHead.filter((item) => item !== "image");
+
+  const onDragStart = (e: React.DragEvent, item: string) => {
+    console.log("dragging", item);
+    e.dataTransfer.setData("text/plain", JSON.stringify(item));
+  };
 
   const _tableData: TransformedCoinData[] =
     tableData.length !== 0

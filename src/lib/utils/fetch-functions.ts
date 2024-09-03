@@ -1,5 +1,12 @@
 import { MarketChartData } from "../models/coin-data.model";
-import { ChartCoinData } from "./chart";
+import { ChartCoinData, prepareChartData } from "./chart";
+
+
+export async function getChartData() {
+  const topCoinsMarketData = await getTopCoinsMarketCharts();
+  const [datasets, labels] = prepareChartData(topCoinsMarketData);
+  return { labels, datasets };
+}
 
 export async function getTopCoinsMarketCharts(): Promise<ChartCoinData[]> {
   const coins = await getTopCoins();
